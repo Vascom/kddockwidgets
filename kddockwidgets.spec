@@ -1,11 +1,11 @@
 Name:           kddockwidgets
 Version:        1.6.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Qt dock widget library
 
-License:        GPL-3.0-only
+License:        GPL-3.0-only AND GPL-2.0-only AND BSD-3-Clause
 URL:            https://github.com/KDAB/KDDockWidgets
-Source0:        %{url}%{version}/archive/refs/tags/v1.6.0.tar.gz
+Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -14,6 +14,8 @@ BuildRequires:  cmake(Qt5Widgets)
 BuildRequires:  cmake(Qt5X11Extras)
 BuildRequires:  cmake(Qt5QuickControls2)
 BuildRequires:  qt5-qtbase-private-devel
+
+%{?_qt5:Requires:       %{_qt5}%{?_isa} = %{_qt5_version}}
 
 %description
 Qt dock widget library written by KDAB, suitable for replacing QDockWidget
@@ -32,7 +34,7 @@ developing applications that use %{name}.
 
 
 %build
-%cmake -G Ninja
+%cmake -G Ninja -DCMAKE_BUILD_TYPE=Release
 %cmake_build
 
 
@@ -41,9 +43,9 @@ developing applications that use %{name}.
 rm -r %{buildroot}%{_datadir}/doc
 
 %files
-%license LICENSE.GPL.txt LICENSE.txt
+%license LICENSES/* LICENSE.txt
 %doc CONTRIBUTORS.txt Changelog README.md
-%{_libdir}/libkddockwidgets.so.*
+%{_libdir}/libkddockwidgets.so.1*
 
 %files devel
 %{_includedir}/kddockwidgets
@@ -52,5 +54,8 @@ rm -r %{buildroot}%{_datadir}/doc
 %{_libdir}/qt5/mkspecs/modules/qt_KDDockWidgets.pri
 
 %changelog
+* Tue Mar 28 2023 Vasiliy Glazov <vascom2@gmail.com> - 1.6.0-2
+- Pin Qt5 version
+
 * Fri Mar 24 2023 Vasiliy Glazov <vascom2@gmail.com> - 1.6.0-1
 - Initial packaging.
